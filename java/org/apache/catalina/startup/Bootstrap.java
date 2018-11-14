@@ -273,6 +273,7 @@ public final class Bootstrap {
         paramValues[0] = sharedLoader;
         Method method =
             startupInstance.getClass().getMethod(methodName, paramTypes);
+        // 反射调用org.apache.catalina.startup.Catalina的setParentClassLoader
         method.invoke(startupInstance, paramValues);
 
         catalinaDaemon = startupInstance;
@@ -341,6 +342,25 @@ public final class Bootstrap {
     /**
      * Start the Catalina daemon.
      * @throws Exception Fatal start error
+     *  启动流程
+     *     （1）初始化
+     *		org.apache.catalina.startup.Bootstrap#main
+     *		->org.apache.catalina.startup.Bootstrap#init
+     *		->org.apache.catalina.startup.Bootstrap#load
+     *		-->org.apache.catalina.startup.Catalina#load
+     *		--->org.apache.catalina.core.StandardServer#init
+     *		---->org.apache.catalina.core.StandardService#init
+     *		----->org.apache.catalina.connector.Connector#init
+     *		----->org.apache.catalina.core.StandardEngine#init
+     *		（2）启动
+     * 		org.apache.catalina.startup.Bootstrap#start
+     *		->org.apache.catalina.startup.Catalina#start 通过反射调用
+     *		-->org.apache.catalina.core.StandardServer#start
+     *		--->org.apache.catalina.core.StandardService#start
+     *		---->org.apache.catalina.core.StandardEngine#start
+     *		---->org.apache.catalina.Executor#start
+     *		---->org.apache.catalina.connector.Connector#start
+     *
      */
     public void start()
         throws Exception {
@@ -448,7 +468,7 @@ public final class Bootstrap {
     /**
      * Main method and entry point when starting Tomcat via the provided
      * scripts.
-     *
+     *    启动入口方法
      * @param args Command line arguments to be processed
      */
     public static void main(String args[]) {

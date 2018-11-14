@@ -156,6 +156,7 @@ public abstract class LifecycleBase implements Lifecycle {
     @Override
     public final synchronized void start() throws LifecycleException {
 
+    	// 启动时状态检查
         if (LifecycleState.STARTING_PREP.equals(state) || LifecycleState.STARTING.equals(state) ||
                 LifecycleState.STARTED.equals(state)) {
 
@@ -178,6 +179,7 @@ public abstract class LifecycleBase implements Lifecycle {
             invalidTransition(Lifecycle.BEFORE_START_EVENT);
         }
 
+        // 设置生命周期状态，启动逻辑处理
         try {
             setStateInternal(LifecycleState.STARTING_PREP, null, false);
             startInternal();

@@ -557,7 +557,7 @@ public class Catalina {
 
         // Create and execute our Digester
         Digester digester = createStartDigester();
-
+        // 建Digester实例解析”conf/server.xml”文件
         try (ConfigurationSource.Resource resource = ConfigFileLoader.getSource().getServerXml()) {
             InputStream inputStream = resource.getInputStream();
             InputSource inputSource = new InputSource(resource.getURI().toURL().toString());
@@ -584,6 +584,14 @@ public class Catalina {
         initStreams();
 
         // Start the new server
+        /*最终调用了StandardServer的init方法。
+         * org.apache.catalina.core.StandardServer#init
+		 *	->org.apache.catalina.core.StandardService#init
+		 *	-->org.apache.catalina.connector.Connector#init
+		 *	-->org.apache.catalina.core.StandardEngine#init
+		 *  因为StandardService，Connector，StandardEngine实现了LifeCycle接口，因此符合我们上文所获的生命周期的管理，
+		 *  最终都是通过他们自己实现的initInternal方法进行初始化
+         */
         try {
             getServer().init();
         } catch (LifecycleException e) {

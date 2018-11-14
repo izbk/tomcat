@@ -80,6 +80,19 @@ public class Connector extends LifecycleMBeanBase  {
         boolean aprConnector = AprLifecycleListener.isAprAvailable() &&
                 AprLifecycleListener.getUseAprConnector();
 
+        /**
+         *   协议处理
+         * //  1 HTTP/1.1协议连接器
+         *		org.apache.catalina.connector.Connector#init
+         *		->org.apache.coyote.http11.Http11AprProtocol#init
+         *		-->org.apache.tomcat.util.net.AprEndpoint#init
+         *		(org.apache.coyote.http11.Http11AprProtocol.Http11ConnectionHandler)
+         *	// 2 AJP/1.3协议连接器
+         *		org.apache.catalina.connector.Connector#init
+         *		->org.apache.coyote.ajp.AjpAprProtocol#init
+         *		-->org.apache.tomcat.util.net.AprEndpoint#init
+         *		(org.apache.coyote.ajp.AjpAprProtocol.AjpConnectionHandler)
+         */
         if ("HTTP/1.1".equals(protocol) || protocol == null) {
             if (aprConnector) {
                 protocolHandlerClassName = "org.apache.coyote.http11.Http11AprProtocol";

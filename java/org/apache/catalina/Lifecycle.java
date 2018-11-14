@@ -83,7 +83,7 @@ package org.apache.catalina;
 public interface Lifecycle {
 
 
-    // ----------------------------------------------------- Manifest Constants
+    // -------------------------生命周期阶段常量定义---------------------------- Manifest Constants
 
 
     /**
