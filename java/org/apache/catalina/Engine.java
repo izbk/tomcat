@@ -38,6 +38,20 @@ package org.apache.catalina;
  * hierarchy. Therefore, the implementation's <code>setParent()</code> method
  * should throw <code>IllegalArgumentException</code>.
  *
+ * Engine表示Catalina的Servlet引擎，如果使用了Engine的话，则它是Catalina的顶层容器，
+ * 因此在StardardCataline的setParent()方法中直接抛出的异常.
+ * <Engine name="Catalina" defaultHost="localhost">
+ *  <Realm className="org.apache.catalina.realm.LockOutRealm">
+ *    <Realm className="org.apache.catalina.realm.UserDatabaseRealm"
+ *           resourceName="UserDatabase"/>
+ *  </Realm>
+ *
+ *  <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="true">
+ *    <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
+ *           prefix="localhost_access_log" suffix=".txt"
+ *          pattern="%h %l %u %t &quot;%r&quot; %s %b" />
+ *  </Host>
+ *</Engine>
  * @author Craig R. McClanahan
  */
 public interface Engine extends Container {

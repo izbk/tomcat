@@ -48,6 +48,9 @@ import org.apache.tomcat.util.res.StringManager;
 /**
  * Implementation of a Coyote connector.
  *
+ * Connector是tomcat中监听TCP端口的组件，server.xml默认定义了两个Connector，
+ * 分别用于监听http、ajp端口。对应的代码是org.apache.catalina.connector.Connector，
+ * 它是一个实现类，并且实现了Lifecycle接口
  * @author Craig R. McClanahan
  * @author Remy Maucherat
  */

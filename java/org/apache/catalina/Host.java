@@ -40,6 +40,10 @@ import java.util.regex.Pattern;
  * <p>
  * The child containers attached to a Host are generally implementations
  * of Context (representing an individual servlet context).
+ * 
+ * Host定义了一个虚拟主机，正所谓虚拟主机，当然是可以用来部署应用程序的，
+ * Tomcat的Host也是如此。它在server.xml中定义了一个localhost的Host，应用根
+ * 目录在webapps下面，默认是支持解压重新部署的。
  *
  * @author Craig R. McClanahan
  */

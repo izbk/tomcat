@@ -43,7 +43,13 @@ import org.apache.catalina.startup.Catalina;
  * <strong>NOTE</strong> - The concrete implementation of this class should
  * register the (singleton) instance with the <code>ServerFactory</code>
  * class in its constructor(s).
- *
+ * 
+ * Tomcat由Server、Service、Engine、Connerctor、Host、Context组件组成，其中带有s的代表在
+ * 一个tomcat实例上可以存在多个组件，比如Context(s)，tomcat允许我们部署多个应用，每个应
+ * 用对应一个Context。这些组件在tomcat的conf/server.xml文件中可以找到，对tomcat的调优需
+ * 要改动该文件.Server提供了findService、getCatalina、getCatalinaHome、getCatalinaBase等接口，
+ * 支持查找、遍历Service组件
+ * 
  * @author Craig R. McClanahan
  */
 public interface Server extends Lifecycle {

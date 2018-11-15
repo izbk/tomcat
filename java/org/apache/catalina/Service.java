@@ -32,6 +32,14 @@ import org.apache.catalina.mapper.Mapper;
  * A given JVM can contain any number of Service instances; however, they are
  * completely independent of each other and share only the basic JVM facilities
  * and classes on the system class path.
+ * 
+ * Service的默认实现类是StardardService，类结构和StardardServer很相似，也是继承至
+ * LifecycleMBeanBase，实现了Service接口
+ * 由Service接口不难发现Service组件的内部结构 
+ * - 持有Engine实例 
+ * - 持有Server实例 
+ * - 可以管理多个Connector实例 
+ * - 持有Executor引用
  *
  * @author Craig R. McClanahan
  */

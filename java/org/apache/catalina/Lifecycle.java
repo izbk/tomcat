@@ -78,6 +78,9 @@ package org.apache.catalina;
  * methods that trigger the changed. No {@link LifecycleEvent}s are fired if the
  * attempted transition is not valid.
  *
+ * Server继承至LifeCycle，LifeCycle是一个非常重要的接口，各大组件都继承了这个接口，
+ *  用于管理tomcat的生命周期，比如init、start、stop、destory；另外，它使用了观察者模式，
+ *  LifeCycle是一个监听者，它会向注册的LifecycleListener观察者发出各种事件.
  * @author Craig R. McClanahan
  */
 public interface Lifecycle {

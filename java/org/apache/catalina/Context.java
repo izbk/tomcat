@@ -55,7 +55,9 @@ import org.apache.tomcat.util.http.CookieProcessor;
  * The child containers attached to a Context are generally implementations
  * of Wrapper (representing individual servlet definitions).
  * <p>
- *
+ * Context代表一个独立的web应用，针对每个Context，tomcat都是使用不同的Classloader
+ * 避免类冲突。如果我们希望使用一个自定义的目录作为部署路径的话，可以在server.xml
+ * 中新增Context即可
  * @author Craig R. McClanahan
  */
 public interface Context extends Container, ContextBind {

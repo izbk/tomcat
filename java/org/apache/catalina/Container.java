@@ -73,6 +73,16 @@ import org.apache.juli.logging.Log;
  *     Catalina is embedded in a larger server.
  * </ul>
  *
+ * org.apache.catalina.Container接口定义了容器的api，它是一个处理用户servlet请求并
+ * 返回对象给web用户的模块，它有四种不同的容器： 
+ * - Engine，表示整个Catalina的servlet引擎 
+ * - Host，表示一个拥有若干个Context的虚拟主机 
+ * - Context，表示一个Web应用，一个context包含一个或多个wrapper 
+ * - Wrapper，表示一个独立的servlet
+ * Engine、Host、Context、Wrapper都有一个默认的实现类StandardXXX，均继承至ContainerBase。
+ * 此外，一个容器还包含一系列的Lodder、Logger、Manager、Realm和Resources等.
+ * 一个容器可以有一个或多个低层次上的子容器，并且一个Catalina功能部署并不一定需要全部四种
+ * 容器。一个Context有一个或多个wrapper，而wrapper作为容器层次中的最底层，不能包含子容器。
  * @author Craig R. McClanahan
  * @author Remy Maucherat
  */
