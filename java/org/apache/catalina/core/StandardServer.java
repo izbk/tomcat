@@ -110,6 +110,7 @@ public final class StandardServer extends LifecycleMBeanBase implements Server {
 
     /**
      * The port number on which we wait for shutdown commands.
+     * 监听关闭命令的端口
      */
     private int port = 8005;
 
@@ -531,6 +532,8 @@ public final class StandardServer extends LifecycleMBeanBase implements Server {
                 }
 
                 // Match against our command string
+                // 在配置的端口上通过ServerSocket来监听一个请求的到来，如果请求的字符串和配置的字符串
+                // 相同的话即跳出循环，这样的话就会运行stop方法，运行完了以后，main线程就退出了。
                 boolean match = command.toString().equals(shutdown);
                 if (match) {
                     log.info(sm.getString("standardServer.shutdownViaPort"));

@@ -485,6 +485,7 @@ public class Catalina {
         Server s = getServer();
         if (s == null) {
             // Create and execute our Digester
+        	// 通过Digester解析conf/server.xml，最终生成了未初始化的StandardServer对象。
             Digester digester = createStopDigester();
             File file = configFile();
             try (FileInputStream fis = new FileInputStream(file)) {
@@ -659,6 +660,8 @@ public class Catalina {
         }
 
         // Register shutdown hook
+        // shutdown hook是一个已经初始化但是还没有启动的线程，当JVM关闭的时候，
+        // 它会启动并并发的运行所有已经注册过的shutdown hooks，多用于意外关闭Tomcat的时候
         if (useShutdownHook) {
             if (shutdownHook == null) {
                 shutdownHook = new CatalinaShutdownHook();
@@ -675,6 +678,10 @@ public class Catalina {
             }
         }
 
+        // Tomcat启动的时候的主线程会在8005端口（默认配置，可以更改）上建立socket监听，
+        // 当关闭的时候，最终其实就是新起了一个进程然后向Tomcat主线程监听的8005端口发送
+        // 了一个SHUTDOWN字符串，这样主线程就会结束了，主线程结束了以后，因为其它的线
+        // 程都是dameon线程，这样依赖Jvm就会退出了。
         if (await) {
             await();
             stop();
