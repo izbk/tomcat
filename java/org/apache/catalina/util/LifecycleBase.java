@@ -33,6 +33,10 @@ import org.apache.tomcat.util.res.StringManager;
  * Base implementation of the {@link Lifecycle} interface that implements the
  * state transition rules for {@link Lifecycle#start()} and
  * {@link Lifecycle#stop()}
+ * 
+ * 它实现了Lifecycle的init、start、stop等主要逻辑，向注册在LifecycleBase内部的LifecycleListener
+ * 发出对应的事件，并且预留了initInternal、startInternal、stopInternal等模板方法，便于子类完成
+ * 自己的逻辑
  */
 public abstract class LifecycleBase implements Lifecycle {
 
@@ -183,15 +187,18 @@ public abstract class LifecycleBase implements Lifecycle {
         try {
             setStateInternal(LifecycleState.STARTING_PREP, null, false);
             startInternal();
+            // 如果启动失败直接调用stop
             if (state.equals(LifecycleState.FAILED)) {
                 // This is a 'controlled' failure. The component put itself into the
                 // FAILED state so call stop() to complete the clean-up.
                 stop();
+             // 说明状态有误
             } else if (!state.equals(LifecycleState.STARTING)) {
                 // Shouldn't be necessary but acts as a check that sub-classes are
                 // doing what they are supposed to.
                 invalidTransition(Lifecycle.AFTER_START_EVENT);
             } else {
+            	// 成功完成start，发出STARTED事件
                 setStateInternal(LifecycleState.STARTED, null, false);
             }
         } catch (Throwable t) {
@@ -213,6 +220,7 @@ public abstract class LifecycleBase implements Lifecycle {
      * will be called on the failed component but the parent component will
      * continue to start normally.
      *
+     * 为了保证jmx的正常注册和注销，要求子类在重写initInternal、destroyInternal方法时，必须先调用super.initInternal()。
      * @throws LifecycleException Start error occurred
      */
     protected abstract void startInternal() throws LifecycleException;

@@ -30,7 +30,15 @@ import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.apache.tomcat.util.modeler.Registry;
 import org.apache.tomcat.util.res.StringManager;
-
+/**
+ * JmxEnabled的子类，通过重写initInternal、destroyInternal方法，统一向jmx中注册/取消注册
+ * 当前实例，方便利用jmx对实例对象进行管理，代码上特别强调要求子类先行调用super.initInternal
+ * 
+ * ContainerBase、StandardServer、StandardService、WebappLoader、Connector、
+ * StandardContext、StandardEngine、StandardHost、StandardWrapper等容器都继承了
+ * LifecycleMBeanBase，因此这些容器都具有了同样的生命周期并可以通过JMX进行管理
+ * 
+ */
 public abstract class LifecycleMBeanBase extends LifecycleBase
         implements JmxEnabled {
 
