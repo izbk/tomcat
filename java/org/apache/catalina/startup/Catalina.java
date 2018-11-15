@@ -537,6 +537,9 @@ public class Catalina {
 
     /**
      * Start a new server instance.
+     * load阶段主要是通过读取conf/server.xml或者server-embed.xml，实例化Server、Service、Connector、
+     * Engine、Host等组件，并调用Lifecycle#init()完成初始化动作，以及发出INITIALIZING、INITIALIZED
+     * 事件.
      */
     public void load() {
 
@@ -594,6 +597,8 @@ public class Catalina {
 		 *  最终都是通过他们自己实现的initInternal方法进行初始化
          */
         try {
+        	// 调用StarndServer#init()方法，完成各个组件的初始化，并且由parent组件初始化child组件，
+        	// 一层套一层，这个设计真心牛逼！
             getServer().init();
         } catch (LifecycleException e) {
             if (Boolean.getBoolean("org.apache.catalina.startup.EXIT_ON_INIT_FAILURE")) {

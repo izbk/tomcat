@@ -44,6 +44,7 @@ import org.apache.juli.logging.LogFactory;
  * other classes they depend on, such as an XML parser) out of the system
  * class path and therefore not visible to application level classes.
  *
+ * Bootstrap是tomcat的入口，它会完成初始化ClassLoader，实例化Catalina以及load、start动作。
  * @author Craig R. McClanahan
  * @author Remy Maucherat
  */
@@ -247,6 +248,8 @@ public final class Bootstrap {
 
     /**
      * Initialize daemon.
+     * 首先初始化commonLoader、catalinaLoader、sharedLoader，默认情况下这三个是相同的实例，
+     * 用于加载不同的资源。然后，使用反射实例化Catalina，设置其parentClassLoader为sharedLoader
      * @throws Exception Fatal initialization error
      */
     public void init() throws Exception {
@@ -304,6 +307,7 @@ public final class Bootstrap {
             catalinaDaemon.getClass().getMethod(methodName, paramTypes);
         if (log.isDebugEnabled())
             log.debug("Calling startup class " + method);
+        // 反射调用Catalina的load，加载资源
         method.invoke(catalinaDaemon, param);
 
     }

@@ -608,6 +608,11 @@ public class StandardService extends LifecycleMBeanBase implements Service {
     /**
      * Invoke a pre-startup initialization. This is used to allow connectors
      * to bind to restricted ports under Unix operating environments.
+     * 
+     * 首先，往jmx中注册StandardService
+     * 初始化Engine，而Engine初始化过程中会去初始化Realm(权限相关的组件)
+     * 如果存在Executor线程池，还会进行init操作，这个Excecutor是tomcat的接口，继承至java.util.concurrent.Executor、org.apache.catalina.Lifecycle
+     * 初始化Connector连接器，默认有http1.1、ajp连接器，而这个Connector初始化过程，又会对ProtocolHandler进行初始化，开启应用端口的监听，后面会详细分析
      */
     @Override
     protected void initInternal() throws LifecycleException {
@@ -633,7 +638,7 @@ public class StandardService extends LifecycleMBeanBase implements Service {
         mapperListener.init();
 
         // Initialize our defined Connectors
-        // 初始化Connectors
+        // 初始化Connectors,而Connector又会对ProtocolHandler进行初始化，开启应用端口的监听
         synchronized (connectorsLock) {
             for (Connector connector : connectors) {
                 connector.init();

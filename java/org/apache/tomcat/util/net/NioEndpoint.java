@@ -207,6 +207,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel,SocketChannel> 
      */
     @Override
     public void bind() throws Exception {
+    	// 实例化ServerSocketChannel，并且绑定端口和地址，设置最大连接数
         initServerSocket();
 
         // Initialize thread count defaults for acceptor, poller

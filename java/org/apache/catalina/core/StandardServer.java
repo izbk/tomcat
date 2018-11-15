@@ -833,6 +833,10 @@ public final class StandardServer extends LifecycleMBeanBase implements Server {
     /**
      * Invoke a pre-startup initialization. This is used to allow connectors
      * to bind to restricted ports under Unix operating environments.
+     * 1.先是调用super.initInternal()，把自己注册到jmx
+     * 2.然后注册StringCache和MBeanFactory
+     * 3.初始化NamingResources，就是server.xml中指定的GlobalNamingResources
+     * 4.调用Service子容器的init方法，让Service组件完成初始化，注意：在同一个Server下面，可能存在多个Service组件
      */
     @Override
     protected void initInternal() throws LifecycleException {
