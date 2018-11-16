@@ -33,6 +33,7 @@ import java.util.Set;
  * will always be executed last.  Other Valves will be executed in the order
  * that they were added, before the basic Valve is executed.</p>
  *
+ * Pipeline是管道组件，用于封装了一组有序的Valve，便于Valve顺序地传递或者处理请求
  * @author Craig R. McClanahan
  * @author Peter Donald
  */

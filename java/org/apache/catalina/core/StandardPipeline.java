@@ -174,6 +174,7 @@ public class StandardPipeline extends LifecycleBase implements Pipeline {
         if (current == null) {
             current = basic;
         }
+        // StandardPipeline 会遍历 Valve 链表，如果 Valve 是 Lifecycle 的子类，则会调用其 start 方法启动 Valve 组件
         while (current != null) {
             if (current instanceof Lifecycle)
                 ((Lifecycle) current).start();

@@ -419,6 +419,7 @@ public class HostConfig implements LifecycleListener {
 
         File appBase = host.getAppBaseFile();
         File configBase = host.getConfigBaseFile();
+        // 过滤出 webapp 要部署应用的目录
         String[] filteredAppPaths = filterAppPaths(appBase.list());
         // Deploy XML descriptors from configBase
         deployDescriptors(configBase, configBase.list());
@@ -1129,7 +1130,7 @@ public class HostConfig implements LifecycleListener {
             } else {
                 context = (Context) Class.forName(contextClass).getConstructor().newInstance();
             }
-
+            // 实例化ContextConfig，作为 LifecycleListener添加到Context容器中，这和StandardHost的套路一样，都是使用 XXXConfig
             Class<?> clazz = Class.forName(host.getConfigClass());
             LifecycleListener listener = (LifecycleListener) clazz.getConstructor().newInstance();
             context.addLifecycleListener(listener);
@@ -1138,6 +1139,7 @@ public class HostConfig implements LifecycleListener {
             context.setPath(cn.getPath());
             context.setWebappVersion(cn.getVersion());
             context.setDocBase(cn.getBaseName());
+            // 实例化 Context 之后，为 Host 添加子容器
             host.addChild(context);
         } catch (Throwable t) {
             ExceptionUtils.handleThrowable(t);
@@ -1581,6 +1583,7 @@ public class HostConfig implements LifecycleListener {
             host.setAutoDeploy(false);
         }
 
+        // 发布部署APP
         if (host.getDeployOnStartup())
             deployApps();
 

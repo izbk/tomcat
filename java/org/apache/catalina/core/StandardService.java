@@ -524,12 +524,14 @@ public class StandardService extends LifecycleMBeanBase implements Service {
             }
         }
 
+        // 启动Executor线程池
         synchronized (executors) {
             for (Executor executor: executors) {
                 executor.start();
             }
         }
 
+        // 启动MapperListener
         mapperListener.start();
 
         // Start our defined Connectors second

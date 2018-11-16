@@ -32,7 +32,13 @@ import org.apache.catalina.connector.Response;
  * <b>HISTORICAL NOTE</b>:  The "Valve" name was assigned to this concept
  * because a valve is what you use in a real world pipeline to control and/or
  * modify flows through it.
- *
+ * Valve 是阀门组件，穿插在 Container 容器中，可以把它理解成请求拦截器，在 tomcat 接收到
+ * 网络请求与触发 Servlet 之间执行
+ * tomcat为我们提供了一系列的Valve 
+ * - AccessLogValve，记录请求日志，默认会开启 
+ * - RemoteAddrValve，可以做访问控制，比如限制IP黑白名单 
+ * - RemoteIpValve，主要用于处理 X-Forwarded-For 请求头，用来识别通过HTTP代理或负载均
+ * 衡方式连接到Web服务器的客户端最原始的IP地址的HTTP请求头字段
  * @author Craig R. McClanahan
  * @author Gunnar Rjnning
  * @author Peter Donald
