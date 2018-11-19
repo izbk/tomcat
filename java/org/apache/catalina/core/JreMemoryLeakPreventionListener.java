@@ -231,6 +231,7 @@ public class JreMemoryLeakPreventionListener implements LifecycleListener {
             {
                 // Use the system classloader as the victim for all this
                 // ClassLoader pinning we're about to do.
+            	// 当线程上下文类加载器指定为系统类加载器
                 Thread.currentThread().setContextClassLoader(
                         ClassLoader.getSystemClassLoader());
 
@@ -252,6 +253,7 @@ public class JreMemoryLeakPreventionListener implements LifecycleListener {
                 // Trigger a call to sun.awt.AppContext.getAppContext(). This
                 // will pin the system class loader in memory but that shouldn't
                 // be an issue.
+                // 避免开启的子线程持有 ParallelWebappClassLoader 引用
                 if (appContextProtection) {
                     ImageIO.getCacheDirectory();
                 }
@@ -313,6 +315,7 @@ public class JreMemoryLeakPreventionListener implements LifecycleListener {
                  *
                  * Fixed in Java 9 onwards (from early access build 133)
                  */
+                // 避免持有 ParallelWebappClassLoader 引用
                 if (tokenPollerProtection && !JreCompat.isJre9Available()) {
                     java.security.Security.getProviders();
                 }
@@ -419,6 +422,7 @@ public class JreMemoryLeakPreventionListener implements LifecycleListener {
                 }
 
             } finally {
+            	// 再重置为 ParallelWebappClassLoader，避免影响其它的类的加载
                 Thread.currentThread().setContextClassLoader(loader);
             }
         }
