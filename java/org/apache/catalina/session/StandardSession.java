@@ -74,7 +74,12 @@ import org.apache.tomcat.util.res.StringManager;
  * <b>IMPLEMENTATION NOTE</b>:  If you add fields to this class, you must
  * make sure that you carry them over in the read/writeObject methods so
  * that this class is properly serialized.
- *
+ * StandardSession 同时实现了 javax.servlet.http.HttpSession、org.apache.catalina.Session 接口，
+ * 并且对外提供的是 StandardSessionFacade 外观类，保证了 StandardSession 的安全，避免开发人员
+ * 调用其内部方法进行不当操作。而 org.apache.catalina.connector.Request 实现了 javax.servlet.http.
+ * HttpServletRequest 接口，它持有 StandardSession 的引用，对外也是暴露 RequestFacade 外观类。
+ * 而 StandardManager 内部维护了其创建的 StandardSession，是一对多的关系，并且持有 StandardContext 
+ * 的引用，而 StandardContext 内部注册了 webapp 所有的 HttpSessionListener 实例。
  * @author Craig R. McClanahan
  * @author Sean Legassick
  * @author <a href="mailto:jon@latchkey.com">Jon S. Stevens</a>
@@ -652,7 +657,7 @@ public class StandardSession implements HttpSession, Session, Serializable {
         if (ACTIVITY_CHECK && accessCount.get() > 0) {
             return true;
         }
-
+        // 如果指定了最大不活跃时间，才会进行清理，这个时间是 Context.getSessionTimeout()，默认是30分钟
         if (maxInactiveInterval > 0) {
             int timeIdle = (int) (getIdleTimeInternal() / 1000L);
             if (timeIdle >= maxInactiveInterval) {
@@ -853,6 +858,7 @@ public class StandardSession implements HttpSession, Session, Serializable {
             try {
                 oldContextClassLoader = context.bind(Globals.IS_SECURITY_ENABLED, null);
                 for (int i = 0; i < keys.length; i++) {
+                	// 清除内部的 key/value，避免因为强引用而导致无法回收 Session 对象
                     removeAttributeInternal(keys[i], notify);
                 }
             } finally {

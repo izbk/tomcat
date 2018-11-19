@@ -34,7 +34,8 @@ import java.io.IOException;
  * <li>Must allow a call to <code>stop()</code> to be followed by a call to
  *     <code>start()</code> on the same <code>Manager</code> instance.
  * </ul>
- *
+ * 它提供了 Context、org.apache.catalina.SessionIdGenerator 的 getter/setter 接口，以及创建、添加、移除、
+ * 查找、遍历 Session 的 API 接口，此外还提供了 Session 持久化的接口（load/unload） 用于加载/卸载会话信息
  * @author Craig R. McClanahan
  */
 public interface Manager {

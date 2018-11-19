@@ -663,6 +663,7 @@ public abstract class ManagerBase extends LifecycleMBeanBase implements Manager 
     @Override
     public Session createSession(String sessionId) {
 
+    	// 限制 session 数量，默认不做限制，maxActiveSessions = -1
         if ((maxActiveSessions >= 0) &&
                 (getActiveSessions() >= maxActiveSessions)) {
             rejectedSessions++;
@@ -678,6 +679,7 @@ public abstract class ManagerBase extends LifecycleMBeanBase implements Manager 
         session.setNew(true);
         session.setValid(true);
         session.setCreationTime(System.currentTimeMillis());
+        // 设置最大不活跃时间(单位s)，如果超过这个时间，仍然没有请求的话该Session将会失效
         session.setMaxInactiveInterval(getContext().getSessionTimeout() * 60);
         String id = sessionId;
         if (id == null) {

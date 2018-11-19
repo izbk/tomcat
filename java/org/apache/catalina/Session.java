@@ -29,7 +29,12 @@ import javax.servlet.http.HttpSession;
  * A <b>Session</b> is the Catalina-internal facade for an
  * <code>HttpSession</code> that is used to maintain state information
  * between requests for a particular user of a web application.
- *
+ * tomcat session 组件图如下所示，Host包含Context包含Manager和SessionListener
+ * 其中 Context 对应一个 webapp 应用，每个 webapp 有多个 HttpSessionListener，
+ * 并且每个应用的 session 是独立管理的，而 session 的创建、销毁由 Manager 组件完成，它内部维护了 N 个 Session 
+ * 实例对象。在前面的文章中，我们分析了 Context 组件，它的默认实现是 StandardContext，它与 Manager 是一对一
+ * 的关系，Manager 创建、销毁会话时，需要借助 StandardContext 获取 HttpSessionListener 列表并进行事件通知，
+ * 而 StandardContext 的后台线程会对 Manager 进行过期 Session 的清理工作
  * @author Craig R. McClanahan
  */
 public interface Session {

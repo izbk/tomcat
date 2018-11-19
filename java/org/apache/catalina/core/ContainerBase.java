@@ -1357,6 +1357,8 @@ public abstract class ContainerBase extends LifecycleMBeanBase
                 Container[] children = container.findChildren();
                 for (int i = 0; i < children.length; i++) {
                     if (children[i].getBackgroundProcessorDelay() <= 0) {
+                    	// 如果子容器的 backgroundProcessorDelay 参数小于0，则递归处理子容器
+                        // 因为如果该值大于0，说明子容器自己开启了线程处理，因此父容器不需要再做处理
                         processChildren(children[i]);
                     }
                 }
