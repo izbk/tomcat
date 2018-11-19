@@ -117,7 +117,9 @@ import org.apache.tomcat.util.security.PermissionCheck;
  * application classes to instrument other classes in the same web
  * application. It does not permit instrumentation of system or container
  * classes or classes in other web apps.
- *
+ * 
+ * WebappClassLoaderBase 实现了主要的逻辑，并且继承了 Lifecycle，在 tomcat 组件启动、
+ * 关闭时会完成资源的加载、卸载操作
  * @author Remy Maucherat
  * @author Craig R. McClanahan
  */
@@ -1500,10 +1502,12 @@ public abstract class WebappClassLoaderBase extends URLClassLoader
 
         state = LifecycleState.STARTING_PREP;
 
+        // 加载/WEB-INF/classes目录下资源
         WebResource classes = resources.getResource("/WEB-INF/classes");
         if (classes.isDirectory() && classes.canRead()) {
             localRepositories.add(classes.getURL());
         }
+        // 加载/WEB-INF/lib目录下jar
         WebResource[] jars = resources.listResources("/WEB-INF/lib");
         for (WebResource jar : jars) {
             if (jar.getName().endsWith(".jar") && jar.isFile() && jar.canRead()) {

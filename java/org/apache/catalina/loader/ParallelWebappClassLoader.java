@@ -19,7 +19,11 @@ package org.apache.catalina.loader;
 import org.apache.catalina.LifecycleException;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
-
+/**
+ * tomcat8 默认使用 ParallelWebappClassLoader，支持并行加载类的特性
+ * 
+ * @ClassName  ParallelWebappClassLoader   
+ */
 public class ParallelWebappClassLoader extends WebappClassLoaderBase {
 
     private static final Log log = LogFactory.getLog(ParallelWebappClassLoader.class);

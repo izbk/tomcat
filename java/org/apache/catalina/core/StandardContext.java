@@ -4912,7 +4912,7 @@ public class StandardContext extends ContainerBase
         if (ok) {
             resourcesStart();
         }
-
+        // 实例化 Loader 实例，它是 tomcat 对于 ClassLoader 的封装，用于支持在运行期间热加载 class 
         if (getLoader() == null) {
             WebappLoader webappLoader = new WebappLoader(getParentClassLoader());
             webappLoader.setDelegate(getDelegate());
@@ -4965,11 +4965,13 @@ public class StandardContext extends ContainerBase
 
 
         // Binding thread
+        // 将 Loader 中的 ParallelWebappClassLoader 绑定到当前线程中，并返回 catalina 类加载器
         ClassLoader oldCCL = bindThread();
 
         try {
             if (ok) {
                 // Start our subordinate components, if any
+            	// 启动类加载器，完成初始化
                 Loader loader = getLoader();
                 if (loader instanceof Lifecycle) {
                     ((Lifecycle) loader).start();

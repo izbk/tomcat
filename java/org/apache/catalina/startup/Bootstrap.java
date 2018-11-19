@@ -163,6 +163,7 @@ public final class Bootstrap {
     private ClassLoader createClassLoader(String name, ClassLoader parent)
         throws Exception {
 
+    	// 从catalina.propeties中读取配置，并替换 catalina.home、或者catalina.base，或者环境变量
         String value = CatalinaProperties.getProperty(name + ".loader");
         if ((value == null) || (value.equals("")))
             return parent;
@@ -173,6 +174,7 @@ public final class Bootstrap {
 
         String[] repositoryPaths = getPaths(value);
 
+        // 遍历目录，并对路径进行处理
         for (String repository : repositoryPaths) {
             // Check for a JAR URL repository
             try {
@@ -256,6 +258,7 @@ public final class Bootstrap {
 
         initClassLoaders();
 
+        // 设置线程上下文类加载器为 catalinaLoader 
         Thread.currentThread().setContextClassLoader(catalinaLoader);
 
         SecurityClassLoad.securityClassLoad(catalinaLoader);
