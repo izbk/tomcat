@@ -418,12 +418,16 @@ public class StandardPipeline extends LifecycleBase implements Pipeline {
     public void removeValve(Valve valve) {
 
         Valve current;
+        //如果first 是需要被移除的valve 那么将first的下一个阀门赋值给first
+        //并且current 赋值null,否则current 赋值first
         if(first == valve) {
             first = first.getNext();
             current = null;
         } else {
             current = first;
         }
+        //遍历阀门链表 查找需要被移除的阀门
+        //如果之前first是被移除的话 current = null是不会进入该循环
         while (current != null) {
             if (current.getNext() == valve) {
                 current.setNext(valve.getNext());
@@ -432,11 +436,16 @@ public class StandardPipeline extends LifecycleBase implements Pipeline {
             current = current.getNext();
         }
 
+        //如果first（此时已经指向下一个阀门）此时  == 基础阀，那么first置空
+        //从这里可以看出来 first指的是第一个阀门，即使整个container只有一个基础阀门也不会指向基础阀。
+        //first严格定义是 除了基础阀的第一个阀门。
         if (first == basic) first = null;
 
+        //验证需要被移除的阀门 取消container关联
         if (valve instanceof Contained)
             ((Contained) valve).setContainer(null);
 
+        //调用阀门的生命周期 stop destroy 方法。
         if (valve instanceof Lifecycle) {
             // Stop this valve if necessary
             if (getState().isAvailable()) {
@@ -452,7 +461,7 @@ public class StandardPipeline extends LifecycleBase implements Pipeline {
                 log.error("StandardPipeline.removeValve: destroy: ", e);
             }
         }
-
+        //触发container的移除valve事件。
         container.fireContainerEvent(Container.REMOVE_VALVE_EVENT, valve);
     }
 

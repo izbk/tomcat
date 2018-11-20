@@ -33,7 +33,16 @@ import java.util.Set;
  * will always be executed last.  Other Valves will be executed in the order
  * that they were added, before the basic Valve is executed.</p>
  *
- * Pipeline是管道组件，用于封装了一组有序的Valve，便于Valve顺序地传递或者处理请求
+ * Pipeline是管道组件，用于封装了一组有序的Valve，便于Valve顺序地传递或者处理请求.
+ * Pipeline-Value 是责任链模式，责任链模式是指在一个请求处理的过程中有多个处理者依次对请求进行处理，
+ * 每个处理者负责做自己相应的处理，处理完成后将处理后的请求返回，再让下一个处理者继续处理。
+ * 不过Pipeline-Value 的管道模型和普通的责任链模式稍微有点不同，区别主要有两点：
+ * 1.每个Pipeline 都有特定的Value ，而且是在管道的最后一个执行，这个Value 叫BaseValue,Base Value 是不可删除的；
+ * 2.在上层容器的管道的BaseValue 中会调用下层容器的管道。4 个容器的BaseValue 分别是Standard Engine Valve 、StandardHostValve 、StandardContextValve 和StandardWrapperValve，整个处理的流程如下图
+ * - - - - - - - -  - - - - - - - - - -  - - - - - - - -  - - -           - - - - - - - -  - - - - - - - - - -  - - - - - - - -  - - - -    - - - - - - - -  - - - - - - - - - -  - - - - - - - -  - - - - - -       - - - - - - - -  - - - - - - - - - -  - - - - - - - -  - - - - - - -
+ * \ EnginePipeLine                                               \         \ HostPipeLine                                               \      \ ContextPipeLine                                               \        \ WrapperPipeLine                                                    \
+ * \ EngineValve1-->... -->StandardEngineValue \ ==>  \ HostValve1-->... -->StandardHostValue  \ ==>\ ContextValve1-->... -->StandardContextValue\ ==>\ WrapperValve1-->... -->StandardWrapperValue\
+ * - - - - - - - - - -- - - - - - -  - - - - - - - -  - - - - -             - - - - - - - - -- - - - - - -  - - - - - - - -  - - - - - -    - - - - - - - - -- - - - - - -  - - - - - - - -  - - - - - - - - -       - - - - - - - - -- - - - - - -  - - - - - - - -  - - - - - - - - - -
  * @author Craig R. McClanahan
  * @author Peter Donald
  */
